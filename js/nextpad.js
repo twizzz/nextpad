@@ -11,6 +11,11 @@
 (function(OCA) {
     OCA.FilesNextpad = {
         attach: function(fileList) {
+            if (OCA.Theming) {
+                OC.MimeType._mimeTypeIcons['application/x-nextpad'] = OC.generateUrl('/apps/theming/img/nextpad/etherpad-lite.ico?v=' + OCA.Theming.cacheBuster);
+            } else {
+                OC.MimeType._mimeTypeIcons['application/x-nextpad'] = OC.imagePath('nextpad', 'etherpad-lite.ico');
+            }
             this._extendFileActions(fileList.fileActions);
         },
 

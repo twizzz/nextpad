@@ -33,7 +33,7 @@ class Application extends App {
         $dispatcher->addListener(
             'OCA\Files_Sharing::loadAdditionalScripts',
             function () {
-                Util::addScript('nextpad', 'nextpad');
+                Util::addScript('nextpad', 'nextpad_public');
                 Util::addStyle('nextpad', 'nextpad');
             });
     }
