@@ -1,6 +1,6 @@
 {
     "name": "ownpad/3rdparty",
-    "description": "3rdparty components for ownpad",
+    "description": "3rdparty components for nextpad",
     "license": "MIT",
     "config": {
 	"vendor-dir": ".",

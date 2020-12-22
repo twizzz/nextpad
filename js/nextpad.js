@@ -1,5 +1,5 @@
 /**
- * Nextcloud - Ownpad
+ * Nextcloud - Nextpad
  *
  * This file is licensed under the Affero General Public License
  * version 3 or later. See the COPYING file.
@@ -9,13 +9,13 @@
  */
 
 (function(OCA) {
-    OCA.FilesOwnpad = {
+    OCA.FilesNextpad = {
         attach: function(fileList) {
             this._extendFileActions(fileList.fileActions);
         },
 
         hide: function() {
-            $('#ownpad').remove();
+            $('#nextpad').remove();
             FileList.setViewerMode(false);
 
             // replace the controls with our own
@@ -26,9 +26,9 @@
             var self = this;
             var $iframe;
 
-            var viewer = OC.generateUrl('/apps/ownpad/?file={file}&dir={dir}', {file: fileName, dir: dirName});
+            var viewer = OC.generateUrl('/apps/nextpad/?file={file}&dir={dir}', {file: fileName, dir: dirName});
 
-            $iframe = $('<iframe id="ownpad" style="width:100%;height:100%;display:block;position:absolute;top:0;z-index:999;" src="'+viewer+'"/>');
+            $iframe = $('<iframe id="nextpad" style="width:100%;height:100%;display:block;position:absolute;top:0;z-index:999;" src="'+viewer+'"/>');
 
             FileList.setViewerMode(true);
 
@@ -36,14 +36,14 @@
             $("#pageWidthOption").attr("selected","selected");
             $('#app-content #controls').addClass('hidden');
 
-            $('#ownpad').load(function(){
-                var iframe = $('#ownpad').contents();
+            $('#nextpad').load(function(){
+                var iframe = $('#nextpad').contents();
                 if ($('#fileList').length) {
-                    iframe.find('#ownpad_close').click(function() {
+                    iframe.find('#nextpad_close').click(function() {
                         self.hide();
                     });
                 } else {
-                    iframe.find("#ownpad_close").addClass('hidden');
+                    iframe.find("#nextpad_close").addClass('hidden');
                 }
             });
         },
@@ -52,27 +52,27 @@
             var self = this;
             fileActions.registerAction({
                 name: 'view',
-                displayName: 'Ownpad',
-                mime: 'application/x-ownpad',
+                displayName: 'Nextpad',
+                mime: 'application/x-nextpad',
                 permissions: OC.PERMISSION_READ,
                 actionHandler: function(fileName, context) {
                     self.show(fileName, context.dir);
                 }
             });
-            fileActions.setDefault('application/x-ownpad', 'view');
+            fileActions.setDefault('application/x-nextpad', 'view');
         }
     };
 })(OCA);
 
-OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
+OC.Plugins.register('OCA.Files.FileList', OCA.FilesNextpad);
 
 (function(OCA) {
 
-    var FilesOwnpadMenu = function() {
+    var FilesNextpadMenu = function() {
         this.initialize();
     }
 
-    FilesOwnpadMenu.prototype = {
+    FilesNextpadMenu.prototype = {
 
         _etherpadEnabled: false,
         _etherpadPublicEnabled: false,
@@ -84,12 +84,12 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
 
             if(OC.getCurrentUser().uid !== null) {
                 $.ajax({
-                    url: OC.generateUrl('/apps/ownpad/ajax/v1.0/getconfig')
+                    url: OC.generateUrl('/apps/nextpad/ajax/v1.0/getconfig')
                 }).done(function(result) {
-                    self._etherpadEnabled = result.data.ownpad_etherpad_enable === "yes";
-                    self._etherpadPublicEnabled = result.data.ownpad_etherpad_public_enable === "yes";
-                    self._etherpadAPIEnabled = result.data.ownpad_etherpad_useapi === "yes";
-                    self._ethercalcEnabled = result.data.ownpad_ethercalc_enable === "yes";
+                    self._etherpadEnabled = result.data.nextpad_etherpad_enable === "yes";
+                    self._etherpadPublicEnabled = result.data.nextpad_etherpad_public_enable === "yes";
+                    self._etherpadAPIEnabled = result.data.nextpad_etherpad_useapi === "yes";
+                    self._ethercalcEnabled = result.data.nextpad_ethercalc_enable === "yes";
                     OC.Plugins.register('OCA.Files.NewFileMenu', self);
                 });
             }
@@ -103,8 +103,8 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
                 if (self._etherpadPublicEnabled === true || self._etherpadAPIEnabled === false) {
                     newFileMenu.addMenuEntry({
                         id: 'etherpad',
-                        displayName: t('ownpad', 'Pad'),
-                        templateName: t('ownpad', 'New pad.pad'),
+                        displayName: t('nextpad', 'Pad'),
+                        templateName: t('nextpad', 'New pad.pad'),
                         iconClass: 'icon-filetype-etherpad',
                         fileType: 'etherpad',
                         actionHandler: function (filename) {
@@ -118,8 +118,8 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
                     var templateName = self._etherpadPublicEnabled === true ? 'New protected pad.pad' : 'New pad.pad';
                     newFileMenu.addMenuEntry({
                         id: 'etherpad-api',
-                        displayName: t('ownpad', displayName),
-                        templateName: t('ownpad', templateName),
+                        displayName: t('nextpad', displayName),
+                        templateName: t('nextpad', templateName),
                         iconClass: 'icon-filetype-etherpad',
                         fileType: 'etherpad',
                         actionHandler: function(filename) {
@@ -132,8 +132,8 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
             if(self._ethercalcEnabled === true) {
                 newFileMenu.addMenuEntry({
                     id: 'ethercalc',
-                    displayName: t('ownpad', 'Calc'),
-                    templateName: t('ownpad', 'New calc.calc'),
+                    displayName: t('nextpad', 'Calc'),
+                    templateName: t('nextpad', 'New calc.calc'),
                     iconClass: 'icon-filetype-ethercalc',
                     fileType: 'ethercalc',
                     actionHandler: function(filename) {
@@ -153,7 +153,7 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
             filename = FileList.getUniqueName(filename);
 
             $.post(
-                OC.generateUrl('/apps/ownpad/ajax/v1.0/newpad'), {
+                OC.generateUrl('/apps/nextpad/ajax/v1.0/newpad'), {
                     dir: $('#dir').val(),
                     padname: filename,
                     type: type,
@@ -171,11 +171,11 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
         }
     };
 
-    // Only initialize the Ownpad menu when user is logged in and
+    // Only initialize the Nextpad menu when user is logged in and
     // using the “files” app.
     $(document).ready(function() {
         if($('#filesApp').val()) {
-            OCA.FilesOwnpadMenu = new FilesOwnpadMenu();
+            OCA.FilesNextpadMenu = new FilesNextpadMenu();
         }
     });
 

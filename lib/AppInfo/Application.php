@@ -1,6 +1,6 @@
 <?php
 /**
- * Nextcloud - Ownpad
+ * Nextcloud - Nextpad
  *
  * This file is licensed under the Affero General Public License
  * version 3 or later. See the COPYING file.
@@ -9,7 +9,7 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2017
  */
 
-namespace OCA\Ownpad\AppInfo;
+namespace OCA\Nextpad\AppInfo;
 
 use OCP\AppFramework\App;
 use OCP\Util;
@@ -17,7 +17,7 @@ use OCP\Util;
 class Application extends App {
 
     public function __construct(array $urlParams = array()) {
-        parent::__construct('ownpad', $urlParams);
+        parent::__construct('nextpad', $urlParams);
     }
 
     public function registerHooks() {
@@ -26,8 +26,15 @@ class Application extends App {
         $dispatcher->addListener(
             'OCA\Files::loadAdditionalScripts',
             function() {
-                Util::addStyle('ownpad', 'ownpad');
-                Util::addScript('ownpad', 'ownpad');
+                Util::addStyle('nextpad', 'nextpad');
+                Util::addScript('nextpad', 'nextpad');
+            });
+
+        $dispatcher->addListener(
+            'OCA\Files_Sharing::loadAdditionalScripts',
+            function () {
+                Util::addScript('nextpad', 'nextpad');
+                Util::addStyle('nextpad', 'nextpad');
             });
     }
 }

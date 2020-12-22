@@ -1,6 +1,6 @@
 <?php
 /**
- * Nextcloud - Ownpad
+ * Nextcloud - Nextpad
  *
  * This file is licensed under the Affero General Public License
  * version 3 or later. See the COPYING file.
@@ -9,7 +9,7 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2017
  */
 
-namespace OCA\Ownpad\Settings;
+namespace OCA\Nextpad\Settings;
 
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IConfig;
@@ -37,28 +37,28 @@ class AdminSettings implements ISettings {
      * @return TemplateResponse
      */
     public function getForm() {
-        $ownpad_mimetype_ep_configured = "no";
-        $ownpad_mimetype_ec_configured = "no";
+        $nextpad_mimetype_ep_configured = "no";
+        $nextpad_mimetype_ec_configured = "no";
 
-        if(\OC::$server->getMimeTypeDetector()->detectPath("test.pad") === 'application/x-ownpad') {
-            $ownpad_mimetype_ep_configured = "yes";
+        if(\OC::$server->getMimeTypeDetector()->detectPath("test.pad") === 'application/x-nextpad') {
+            $nextpad_mimetype_ep_configured = "yes";
         }
 
-        if(\OC::$server->getMimeTypeDetector()->detectPath("test.calc") === 'application/x-ownpad') {
-            $ownpad_mimetype_ec_configured = "yes";
+        if(\OC::$server->getMimeTypeDetector()->detectPath("test.calc") === 'application/x-nextpad') {
+            $nextpad_mimetype_ec_configured = "yes";
         }
 
         return new TemplateResponse($this->appName, 'settings', [
-            'ownpad_etherpad_enable' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no'),
-            'ownpad_etherpad_host' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''),
-            'ownpad_etherpad_useapi' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no'),
-            'ownpad_etherpad_public_enable' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_public_enable', 'no'),
-            'ownpad_etherpad_apikey' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_apikey', ''),
-            'ownpad_etherpad_cookie_domain' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', ''),
-            'ownpad_ethercalc_enable' => $this->config->getAppValue('ownpad', 'ownpad_ethercalc_enable', 'no'),
-            'ownpad_ethercalc_host' => $this->config->getAppValue('ownpad', 'ownpad_ethercalc_host', ''),
-            'ownpad_mimetype_ep_configured' => $ownpad_mimetype_ep_configured,
-            'ownpad_mimetype_ec_configured' => $ownpad_mimetype_ec_configured,
+            'nextpad_etherpad_enable' => $this->config->getAppValue('nextpad', 'nextpad_etherpad_enable', 'no'),
+            'nextpad_etherpad_host' => $this->config->getAppValue('nextpad', 'nextpad_etherpad_host', ''),
+            'nextpad_etherpad_useapi' => $this->config->getAppValue('nextpad', 'nextpad_etherpad_useapi', 'no'),
+            'nextpad_etherpad_public_enable' => $this->config->getAppValue('nextpad', 'nextpad_etherpad_public_enable', 'no'),
+            'nextpad_etherpad_apikey' => $this->config->getAppValue('nextpad', 'nextpad_etherpad_apikey', ''),
+            'nextpad_etherpad_cookie_domain' => $this->config->getAppValue('nextpad', 'nextpad_etherpad_cookie_domain', ''),
+            'nextpad_ethercalc_enable' => $this->config->getAppValue('nextpad', 'nextpad_ethercalc_enable', 'no'),
+            'nextpad_ethercalc_host' => $this->config->getAppValue('nextpad', 'nextpad_ethercalc_host', ''),
+            'nextpad_mimetype_ep_configured' => $nextpad_mimetype_ep_configured,
+            'nextpad_mimetype_ec_configured' => $nextpad_mimetype_ec_configured,
         ], 'blank');
     }
 

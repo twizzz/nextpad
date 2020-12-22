@@ -1,6 +1,6 @@
 <?php
 /**
- * Nextcloud - Ownpad
+ * Nextcloud - Nextpad
  *
  * This file is licensed under the Affero General Public License
  * version 3 or later. See the COPYING file.
@@ -9,7 +9,7 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2017
  */
 
-namespace OCA\Ownpad\Service;
+namespace OCA\Nextpad\Service;
 
-class OwnpadException extends \Exception {
+class NextpadException extends \Exception {
 }

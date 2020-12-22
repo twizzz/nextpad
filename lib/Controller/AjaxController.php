@@ -1,6 +1,6 @@
 <?php
 /**
- * Nextcloud - Ownpad
+ * Nextcloud - Nextpad
  *
  * This file is licensed under the Affero General Public License
  * version 3 or later. See the COPYING file.
@@ -9,22 +9,22 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2017
  */
 
-namespace OCA\Ownpad\Controller;
+namespace OCA\Nextpad\Controller;
 
 use \OCP\IRequest;
 use \OCP\AppFramework\Controller;
 use \OCP\AppFramework\Http\JSONResponse;
 use \OCP\AppFramework\Http;
 
-use OCA\Ownpad\Service\OwnpadService;
-use OCA\Ownpad\Service\OwnpadException;
+use OCA\Nextpad\Service\NextpadService;
+use OCA\Nextpad\Service\NextpadException;
 
 class AjaxController extends Controller {
 
-    /** @var OwnpadService */
+    /** @var NextpadService */
     private $service;
 
-    public function __construct($appName, IRequest $request, OwnpadService $service) {
+    public function __construct($appName, IRequest $request, NextpadService $service) {
         parent::__construct($appName, $request);
         $this->service = $service;
     }
@@ -36,10 +36,10 @@ class AjaxController extends Controller {
         $config = [];
 
         $appConfig = \OC::$server->getConfig();
-        $config['ownpad_etherpad_enable'] = $appConfig->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no');
-        $config['ownpad_etherpad_public_enable'] = $appConfig->getAppValue('ownpad', 'ownpad_etherpad_public_enable', 'no');
-        $config['ownpad_etherpad_useapi'] = $appConfig->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no');
-        $config['ownpad_ethercalc_enable'] = $appConfig->getAppValue('ownpad', 'ownpad_ethercalc_enable', 'no');
+        $config['nextpad_etherpad_enable'] = $appConfig->getAppValue('nextpad', 'nextpad_etherpad_enable', 'no');
+        $config['nextpad_etherpad_public_enable'] = $appConfig->getAppValue('nextpad', 'nextpad_etherpad_public_enable', 'no');
+        $config['nextpad_etherpad_useapi'] = $appConfig->getAppValue('nextpad', 'nextpad_etherpad_useapi', 'no');
+        $config['nextpad_ethercalc_enable'] = $appConfig->getAppValue('nextpad', 'nextpad_ethercalc_enable', 'no');
 
         return new JSONResponse(["data" => $config]);
     }
@@ -60,7 +60,7 @@ class AjaxController extends Controller {
                 'status' => 'success',
             ]);
         }
-        catch(OwnpadException $e) {
+        catch(NextpadException $e) {
             $message = [
                 'data' => ['message' => $e->getMessage()],
                 'status' => 'error',

@@ -1,6 +1,6 @@
 <?php
 /**
- * Nextcloud - Ownpad
+ * Nextcloud - Nextpad
  *
  * This file is licensed under the Affero General Public License
  * version 3 or later. See the COPYING file.
@@ -9,7 +9,7 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2017
  */
 
-namespace OCA\Ownpad\Controller;
+namespace OCA\Nextpad\Controller;
 
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
@@ -52,11 +52,11 @@ class DisplayController extends Controller {
         $this->userSession = $userSession;
         $this->config = $config;
 
-        if($this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' AND
-           $this->config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') !== 'no')
+        if($this->config->getAppValue('nextpad', 'nextpad_etherpad_enable', 'no') !== 'no' AND
+           $this->config->getAppValue('nextpad', 'nextpad_etherpad_useapi', 'no') !== 'no')
         {
-            $eplHost = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
-            $eplApiKey = $this->config->getAppValue('ownpad', 'ownpad_etherpad_apikey', '');
+            $eplHost = $this->config->getAppValue('nextpad', 'nextpad_etherpad_host', '');
+            $eplApiKey = $this->config->getAppValue('nextpad', 'nextpad_etherpad_apikey', '');
             $this->eplInstance = new Client($eplApiKey, $eplHost . "/api");
         }
     }
@@ -74,7 +74,7 @@ class DisplayController extends Controller {
         $url = $matches[1];
         $title = $file;
 
-        $eplHost = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
+        $eplHost = $this->config->getAppValue('nextpad', 'nextpad_etherpad_host', '');
         $eplHost = rtrim($eplHost, '/');
         $protectedPadRegex = sprintf('/%s\/p\/(g\.\w{16})\\$(.*)$/', preg_quote($eplHost, '/'));
         $match = preg_match($protectedPadRegex, $url, $matches);
@@ -92,7 +92,7 @@ class DisplayController extends Controller {
 
             $session = $this->eplInstance->createSession($groupID, $author->authorID, time() + 3600);
 
-            $cookieDomain = $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', '');
+            $cookieDomain = $this->config->getAppValue('nextpad', 'nextpad_etherpad_cookie_domain', '');
             setcookie('sessionID', $session->sessionID, 0, '/', $cookieDomain, true, false);
         }
 
@@ -127,10 +127,10 @@ class DisplayController extends Controller {
 
         // Get Host-URL
         if($fileending === "calc") {
-            $host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_ethercalc_host', false);
+            $host = \OC::$server->getConfig()->getAppValue('nextpad', 'nextpad_ethercalc_host', false);
         }
         elseif($fileending === "pad") {
-            $host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_etherpad_host', false);
+            $host = \OC::$server->getConfig()->getAppValue('nextpad', 'nextpad_etherpad_host', false);
         }
 
         if(substr($host, -1, 1) !== '/') {
@@ -174,14 +174,14 @@ class DisplayController extends Controller {
          */
         $policy = new ContentSecurityPolicy();
 
-        if($this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no') {
-            $policy->addAllowedFrameDomain($this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''));
-            $policy->addAllowedChildSrcDomain($this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''));
+        if($this->config->getAppValue('nextpad', 'nextpad_etherpad_enable', 'no') !== 'no') {
+            $policy->addAllowedFrameDomain($this->config->getAppValue('nextpad', 'nextpad_etherpad_host', ''));
+            $policy->addAllowedChildSrcDomain($this->config->getAppValue('nextpad', 'nextpad_etherpad_host', ''));
         }
 
-        if($this->config->getAppValue('ownpad', 'ownpad_ethercalc_enable', 'no') !== 'no') {
-            $policy->addAllowedFrameDomain($this->config->getAppValue('ownpad', 'ownpad_ethercalc_host', ''));
-            $policy->addAllowedChildSrcDomain($this->config->getAppValue('ownpad', 'ownpad_ethercalc_host', ''));
+        if($this->config->getAppValue('nextpad', 'nextpad_ethercalc_enable', 'no') !== 'no') {
+            $policy->addAllowedFrameDomain($this->config->getAppValue('nextpad', 'nextpad_ethercalc_host', ''));
+            $policy->addAllowedChildSrcDomain($this->config->getAppValue('nextpad', 'nextpad_ethercalc_host', ''));
         }
 
         $response->setContentSecurityPolicy($policy);

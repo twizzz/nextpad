@@ -1,6 +1,6 @@
 <?php
 /**
- * Nextcloud - Ownpad
+ * Nextcloud - Nextpad
  *
  * This file is licensed under the Affero General Public License
  * version 3 or later. See the COPYING file.
@@ -9,7 +9,7 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2017
  */
 
-namespace OCA\Ownpad\Migration;
+namespace OCA\Nextpad\Migration;
 
 use OCP\Migration\IRepairStep;
 use OCP\IConfig;
@@ -32,15 +32,15 @@ class MigrateSettings implements IRepairStep {
     }
 
     public function run(IOutput $output) {
-        $installedVersion = $this->config->getAppValue('ownpad', 'installed_version', '0.0.0');
+        $installedVersion = $this->config->getAppValue('nextpad', 'installed_version', '0.0.0');
         if(version_compare($installedVersion, '0.5.2', '<')) {
             $appConfig = \OC::$server->getConfig();
 
-            $enabled = ($appConfig->getAppValue('ownpad', 'ownpad_etherpad_host', '') !== '') ? 'yes' : 'no';
-            $appConfig->setAppValue('ownpad', 'ownpad_etherpad_enable', $enabled);
+            $enabled = ($appConfig->getAppValue('nextpad', 'nextpad_etherpad_host', '') !== '') ? 'yes' : 'no';
+            $appConfig->setAppValue('nextpad', 'nextpad_etherpad_enable', $enabled);
 
-            $enabled = ($appConfig->getAppValue('ownpad', 'ownpad_ethercalc_host', '') !== '') ? 'yes' : 'no';
-            $appConfig->setAppValue('ownpad', 'ownpad_ethercalc_enable', $enabled);
+            $enabled = ($appConfig->getAppValue('nextpad', 'nextpad_ethercalc_host', '') !== '') ? 'yes' : 'no';
+            $appConfig->setAppValue('nextpad', 'nextpad_ethercalc_enable', $enabled);
         }
     }
 }

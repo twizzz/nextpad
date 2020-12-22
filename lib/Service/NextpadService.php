@@ -1,6 +1,6 @@
 <?php
 /**
- * Nextcloud - Ownpad
+ * Nextcloud - Nextpad
  *
  * This file is licensed under the Affero General Public License
  * version 3 or later. See the COPYING file.
@@ -9,17 +9,17 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2017
  */
 
-namespace OCA\Ownpad\Service;
+namespace OCA\Nextpad\Service;
 
 use Exception;
 
-class OwnpadService {
+class NextpadService {
 
     public function create($dir, $padname, $type, $protected) {
         // Generate a random pad name
         $token = \OC::$server->getSecureRandom()->generate(16, \OCP\Security\ISecureRandom::CHAR_LOWER.\OCP\Security\ISecureRandom::CHAR_DIGITS);
 
-        $l10n = \OC::$server->getL10N('ownpad');
+        $l10n = \OC::$server->getL10N('nextpad');
         $l10n_files = \OC::$server->getL10N('files');
 
         $result = ['success' => false,
@@ -27,7 +27,7 @@ class OwnpadService {
 
         if($type === "ethercalc") {
             $ext = "calc";
-            $host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_ethercalc_host', false);
+            $host = \OC::$server->getConfig()->getAppValue('nextpad', 'nextpad_ethercalc_host', false);
 
             /*
              * Prepend the calc’s name with a `=` to enable multisheet
@@ -43,10 +43,10 @@ class OwnpadService {
             $padID = $token;
 
             $config = \OC::$server->getConfig();
-            if($config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' AND $config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') !== 'no') {
+            if($config->getAppValue('nextpad', 'nextpad_etherpad_enable', 'no') !== 'no' AND $config->getAppValue('nextpad', 'nextpad_etherpad_useapi', 'no') !== 'no') {
                 try {
-                    $eplHost = $config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
-                    $eplApiKey = $config->getAppValue('ownpad', 'ownpad_etherpad_apikey', '');
+                    $eplHost = $config->getAppValue('nextpad', 'nextpad_etherpad_host', '');
+                    $eplApiKey = $config->getAppValue('nextpad', 'nextpad_etherpad_apikey', '');
                     $eplInstance = new \EtherpadLite\Client($eplApiKey, $eplHost . "/api");
 
                     if($protected === true) {
@@ -61,17 +61,17 @@ class OwnpadService {
                     }
                 }
                 catch(Exception $e) {
-                    throw new OwnpadException($l10n->t('Unable to communicate with Etherpad API.'));
+                    throw new NextpadException($e);
                 }
             }
 
             $ext = "pad";
-            $host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_etherpad_host', false);
+            $host = \OC::$server->getConfig()->getAppValue('nextpad', 'nextpad_etherpad_host', false);
             $url = sprintf("%s/p/%s", rtrim($host, "/"), $padID);
         }
 
         if($padname === '' || $padname === '.' || $padname === '..') {
-            throw new OwnpadException($l10n->t('Incorrect padname.'));
+            throw new NextpadException($l10n->t('Incorrect padname.'));
         }
 
         try {
@@ -79,11 +79,11 @@ class OwnpadService {
             $view->verifyPath($dir, $padname);
         }
         catch(\OCP\Files\InvalidPathException $ex) {
-            throw new OwnpadException($l10n_files->t("Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed."));
+            throw new NextpadException($l10n_files->t("Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed."));
         }
 
         if(!\OC\Files\Filesystem::file_exists($dir . '/')) {
-            throw new OwnpadException($l10n_files->t('The target folder has been moved or deleted.'));
+            throw new NextpadException($l10n_files->t('The target folder has been moved or deleted.'));
         }
 
         // Add the extension only if padname doesn’t contain it
@@ -97,7 +97,7 @@ class OwnpadService {
         $target = $dir . "/" . $filename;
 
         if(\OC\Files\Filesystem::file_exists($target)) {
-            throw new OwnpadException($l10n_files->t('The name %s is already used in the folder %s. Please choose a different name.', [$filename, $dir]));
+            throw new NextpadException($l10n_files->t('The name %s is already used in the folder %s. Please choose a different name.', [$filename, $dir]));
         }
 
         $content = sprintf("[InternetShortcut]\nURL=%s", $url);
@@ -107,6 +107,6 @@ class OwnpadService {
             return \OCA\Files\Helper::formatFileInfo($meta);
         }
 
-        throw new OwnpadException($l10n_files->t('Error when creating the file'));
+        throw new NextpadException($l10n_files->t('Error when creating the file'));
     }
 }
