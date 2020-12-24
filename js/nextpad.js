@@ -183,5 +183,4 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesNextpad);
             OCA.FilesNextpadMenu = new FilesNextpadMenu();
         }
     });
-
 })(OCA);

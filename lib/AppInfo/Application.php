@@ -18,6 +18,11 @@ class Application extends App {
 
     public function __construct(array $urlParams = array()) {
         parent::__construct('nextpad', $urlParams);
+
+        $container = $this->getContainer();
+        $container->registerService('L10N', function($c) {
+            return $c->query('ServerContainer')->getL10N($c->query('nextpad'));
+        });
     }
 
     public function registerHooks() {
