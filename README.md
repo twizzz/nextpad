@@ -10,6 +10,13 @@ created this way Nextcloud is not responsible for the documents
 security, e.g. anyone with access to the Etherpad/Ethercalc service
 can access your documents.
 
+## Acknowledgement
+
+This repository is based on: [https://github.com/otetard/ownpad/](https://github.com/otetard/ownpad).
+
+This fork allows the plugin to work in public shared folders as well as in combination with the [groupfolders plugin](https://github.com/nextcloud/groupfolders).
+
+
 ## Configuration
 
 In order to make Nextpad work, go to the configuration panel (Settings /

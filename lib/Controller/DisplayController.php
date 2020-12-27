@@ -5,7 +5,7 @@
  * This file is licensed under the Affero General Public License
  * version 3 or later. See the COPYING file.
  *
- * @author Olivier Tétard <olivier.tetard@miskin.fr>
+ * @author Haliax <info@haliax.dev>
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2017
  */
 

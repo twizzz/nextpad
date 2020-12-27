@@ -1,3 +1,13 @@
+/**
+ * Nextcloud - Nextpad
+ *
+ * This file is licensed under the Affero General Public License
+ * version 3 or later. See the COPYING file.
+ *
+ * @author Haliax <info@haliax.dev>
+ * @copyright Haliax <info@haliax.dev>, 2020
+ */
+
 OC.L10N.register(
     'nextpad', {
             'Text Header': 'Open pad',

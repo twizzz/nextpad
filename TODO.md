@@ -25,3 +25,4 @@
 - [ ] Cleanup `sessionID` cookie after logout (a bit tricky, requires
       to save the current `sessionID` somewhere and remove it after
       user logs out).
+  
