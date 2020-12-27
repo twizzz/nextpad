@@ -180,6 +180,14 @@ function npSpinnerPermission(fileName)
 
                     // Match for URL line.
                     url = parseUrl(url.filecontents);
+                    const isProtected = ~url.indexOf("/g.");
+
+                    if (!window.OC.currentUser && isProtected)
+                    {
+                        npSpinnerPermission(fileName);
+                        return;
+                    }
+
                     if (url !== '') {
                         // Redirect.
                         window.location = url;

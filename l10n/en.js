@@ -1,8 +1,8 @@
 OC.L10N.register(
     'nextpad', {
-            'Text Header': 'Pad öffnen',
-            'Text Redirect': 'Sie sind dabei, diesen Link zu öffnen:',
-            'Text Permission': 'Dieses Pad ist geschützt.<br/>Um dieses Pad zu sehen, ist ein Login in die Cloud erforderlich.',
-            'Button Cancel': 'Abbrechen',
-            'Button Redirect': 'Pad öffnen',
+            'Text Header': 'Open pad',
+            'Text Redirect': 'The following is about to be opened:',
+            'Text Permission': 'This pad is protected.<br/>In order to view the content of this pad, please login and access this pad through an internal link.',
+            'Button Cancel': 'Cancel',
+            'Button Redirect': 'Open pad',
     }, 'nplurals=2; plural=(n != 1);');
