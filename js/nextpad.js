@@ -166,6 +166,7 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesNextpad);
                 },
                 function(result) {
                     if(result.status == 'success') {
+                        // Get restricted FileURL and write to File
                         FileList.add(result.data, {animate: true, scrollTo: true});
                     }
                     else {

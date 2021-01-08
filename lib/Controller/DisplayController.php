@@ -112,6 +112,8 @@ class DisplayController extends Controller {
             return '://' . $match[1] . '/' . $match[2] . join('/', array_map('rawurlencode', explode('/', $match[3])));
         }, $url);
 
+        // Check Permissions here and set URL based upon
+
         $params = [
             'urlGenerator' => $this->urlGenerator,
             'url' => $url,

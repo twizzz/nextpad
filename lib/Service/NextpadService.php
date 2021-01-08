@@ -54,10 +54,13 @@ class NextpadService {
                         $group = $eplInstance->createGroup();
                         $groupPad = $eplInstance->createGroupPad($group->groupID, $token);
                         $padID = $groupPad->padID;
+                        $roPadID = $eplInstance->getReadOnlyID($padID)->readOnlyID;
                     }
                     else {
                         // Create a public pad via API
                         $createPadResult = $eplInstance->createPad($token);
+                        $padID = $createPadResult->padID;
+                        $roPadID = $eplInstance->getReadOnlyID($padID)->readOnlyID;
                     }
                 }
                 catch(Exception $e) {
@@ -67,7 +70,7 @@ class NextpadService {
 
             $ext = "pad";
             $host = \OC::$server->getConfig()->getAppValue('nextpad', 'nextpad_etherpad_host', false);
-            $url = sprintf("%s/p/%s", rtrim($host, "/"), $padID);
+            $url = sprintf("%s/p/%s", rtrim($host, "/"), $roPadID);
         }
 
         if($padname === '' || $padname === '.' || $padname === '..') {
