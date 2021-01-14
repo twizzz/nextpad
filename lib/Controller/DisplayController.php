@@ -18,6 +18,7 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
 use OCP\IConfig;
+use OCP\Constants;
 
 use EtherpadLite\Client;
 
@@ -106,13 +107,26 @@ class DisplayController extends Controller {
          * Magic urlencode() function was stolen from this answer on
          * StackOverflow: <http://stackoverflow.com/a/7974253>.
          */
+        $url_raw = $url;
         $url = urldecode($url);
         $url = str_replace(' ', '_', $url);
         $url = preg_replace_callback('#://([^/]+)/(=)?([^?]+)#', function ($match) {
             return '://' . $match[1] . '/' . $match[2] . join('/', array_map('rawurlencode', explode('/', $match[3])));
         }, $url);
 
-        // Check Permissions here and set URL based upon
+        // Check Permissions here and set URL based upon default is readonly
+
+        $roPadID = $substr($url_raw, -34);
+        $padID = $this->eplInstance->getPadID($roPadID)->padID;
+
+
+        if(OC::PERMISSION_UPDATE || OC::PERMISSION_ALL) {
+            //Do something, ein anständiger check wäre nice
+            $url = str_replace($roPadID, $padID, $url);
+        } else {
+            //Keine Schreibrechte, we do nothing
+        }
+
 
         $params = [
             'urlGenerator' => $this->urlGenerator,
