@@ -19,6 +19,8 @@ use OCP\IURLGenerator;
 use OCP\IUserSession;
 use OCP\IConfig;
 use OCP\Constants;
+use OCP\Share\IShare;
+use OCP\Share\IManager as ShareManager;
 
 use EtherpadLite\Client;
 
@@ -36,6 +38,12 @@ class DisplayController extends Controller {
     /** @var Client */
     private $eplInstance;
 
+    /** @var ShareManager */
+	protected $shareManager;
+
+    /** @var Share\IShare */
+	protected $share;
+
     /**
      * @param string $AppName
      * @param IRequest $request
@@ -46,12 +54,15 @@ class DisplayController extends Controller {
         IRequest $request,
         IURLGenerator $urlGenerator,
         IUserSession $userSession,
-        IConfig $config
+        IConfig $config,
+        ShareManager $shareManager
     ) {
         parent::__construct($AppName, $request);
         $this->urlGenerator = $urlGenerator;
         $this->userSession = $userSession;
         $this->config = $config;
+        $this->shareManager = $shareManager;
+        $this->request = $request;
 
         if($this->config->getAppValue('nextpad', 'nextpad_etherpad_enable', 'no') !== 'no' AND
            $this->config->getAppValue('nextpad', 'nextpad_etherpad_useapi', 'no') !== 'no')
@@ -119,11 +130,19 @@ class DisplayController extends Controller {
         $roPadID = $substr($url_raw, -34);
         $padID = $this->eplInstance->getPadID($roPadID)->padID;
 
+        // Check whether share exists
+		try {
+            $token = $this->request->getParam('token'); //Not working yet
+			$share = $this->shareManager->getShareByToken($token);
+		} catch (ShareNotFound $e) {
+			$this->emitAccessShareHook($this->getToken(), 404, 'Share not found');
+			throw new NotFoundException();
+		}
 
-        if(OC::PERMISSION_UPDATE || OC::PERMISSION_ALL) {
+        if($share->getPermissions() === 17) {
             //Do something, ein anständiger check wäre nice
             $url = str_replace($roPadID, $padID, $url);
-        } else {
+        } else if ($share->getPermissions() === 31){
             //Keine Schreibrechte, we do nothing
         }
 
